@@ -146,7 +146,8 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	
+	{ MODKEY,			XK_F5,     livereload,     {0} },
+
 	/* vanity gaps hotkeys */
 	{ MODKEY,                       XK_z,      incrgaps,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_z,      incrgaps,       {.i = -1 } },
