@@ -147,6 +147,8 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY,			XK_F5,     livereload,     {0} },
+	{ 0,                            XK_Print,  spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
+	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
 
 	/* vanity gaps hotkeys */
 	{ MODKEY,                       XK_z,      incrgaps,       {.i = +1 } },
