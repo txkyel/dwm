@@ -12,7 +12,7 @@ static int showbar            = 1;        /* 0 means no bar */
 static int topbar             = 1;        /* 0 means bottom bar */
 static char font[]            = "DejaVu Sans Mono:size=10:antialias=true";
 static char dmenufont[]       = "DejaVu Sans Mono:size=10:antialias=true";
-static const char *fonts[]          = { font };
+static const char *fonts[]          = { font, "Noto Color Emoji:pixelsize=10:antialias=true:autohint=true" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
