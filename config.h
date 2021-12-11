@@ -66,6 +66,8 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 };
 
+#include <X11/XF86keysym.h>
+
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -149,6 +151,13 @@ static Key keys[] = {
 	{ MODKEY,			XK_F5,     livereload,     {0} },
 	{ 0,                            XK_Print,  spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
 	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
+
+	/* Volume controls */
+	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("pamixer -t; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("pamixer -i 2; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("pamixer -d 2; kill -35 $(pidof dwmblocks)") },
+
+
 
 	/* vanity gaps hotkeys */
 	{ MODKEY,                       XK_z,      incrgaps,       {.i = +1 } },
