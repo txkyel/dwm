@@ -261,7 +261,7 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 static void load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
-static void livereload(const Arg *arg);
+static void reload_xresources(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
@@ -2231,12 +2231,14 @@ load_xresources(void)
 }
 
 void
-livereload(const Arg *arg)
+reload_xresources(const Arg *arg)
 {
 	load_xresources();
-	int i;
+	unsigned int i;
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		scheme[i] = drw_scm_create(drw, colors[i], 3);	
+	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
+		die("no fonts could be loaded.");
 	focus(NULL);
 	arrange(NULL);
 }
