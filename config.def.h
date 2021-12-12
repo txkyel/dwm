@@ -11,8 +11,8 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static int showbar            = 1;        /* 0 means no bar */
 static int topbar             = 1;        /* 0 means bottom bar */
 static char font[]            = "DejaVu Sans Mono:size=10:antialias=true";
-static char dmenufont[]       = "DejaVu Sans Mono:size=10:antialias=true";
-static const char *fonts[]          = { font, "Noto Color Emoji:pixelsize=10:antialias=true:autohint=true" };
+static char font2[]           = "Noto Color Emoji:pixelsize=10:antialias=true:autohint=true";
+static const char *fonts[]          = { font, font2 };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -49,19 +49,18 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "[@]",      spiral },
-	{ "[\\]",     dwindle },
-	{ "H[]",      deck },
-	{ "TTT",      bstack },
-	{ "===",      bstackhoriz },
-	{ "HHH",      grid },
-	{ "###",      nrowgrid },
-	{ "---",      horizgrid },
-	{ ":::",      gaplessgrid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
+	{ "[]=",      tile },		/* Default, slaves on right */
+	{ "TTT",      bstack },		/* slaves on bottom vertical stack */
+	
+	{ "[@]",      spiral },		/* Fibonacci spiral */
+	{ "[\\]",     dwindle },	/* Fibonacci dwindle */
+	
+	{ "|M|",      centeredmaster }, 	/* Master in center */
+	{ ">M>",      centeredfloatingmaster }, /* Master floats in center */
+	
+	{ "[M]",      monocle },	/* stack all windows in center */
+	{ "H[]",      deck },		/* slaves as monocole */
+
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
 };
@@ -84,8 +83,6 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 /*
@@ -93,7 +90,7 @@ static const char *termcmd[]  = { "st", NULL };
  */
 ResourcePref resources[] = {
 		{ "font",               STRING,  &font },
-		{ "dmenufont",          STRING,  &dmenufont },
+		{ "font2",              STRING,  &font2 },
 		{ "color0",             STRING,  &normbgcolor },
 		{ "color0",             STRING,  &normbordercolor },
 		{ "color4",             STRING,  &normfgcolor },
@@ -111,26 +108,30 @@ ResourcePref resources[] = {
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	STACKKEYS(MODKEY,                          focus)
-	STACKKEYS(MODKEY|ShiftMask,                push)
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_p,      spawn,          SHCMD("dmenu_run") },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	
+	/* dwm view controls */
+	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,			XK_F5,     livereload,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	// { MODKEY,                       XK_j,      zoom,           {.i = +1 } },
-	// { MODKEY,                       XK_k,      zoom,           {.i = -1 } },
-	{ MODKEY,                       XK_Down,   zoom,           {.i = +1 } },
-	{ MODKEY,                       XK_Up,     zoom,           {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	// { MODKEY,                       XK_Return, zoom,           {0} },	
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	STACKKEYS(MODKEY,                          focus)
+	STACKKEYS(MODKEY|ShiftMask,                push)
+	{ MODKEY,                       XK_o,      incnmaster,     {.i = +1 } }, /* increase number of masters */
+	{ MODKEY|ShiftMask,             XK_o,      incnmaster,     {.i = -1 } }, /* decrease number of masters */
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} }, /* tile */
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} }, /* bstack */
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} }, /* spiral */
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[3]} }, /* dwindle */
+	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[4]} }, /* centeredmaster */
+	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[5]} }, /* centeredfloatingmaster */
+	{ MODKEY,                       XK_d,      setlayout,      {.v = &layouts[6]} }, /* deck */
+	{ MODKEY|ShiftMask,             XK_d,      setlayout,      {.v = &layouts[7]} }, /* monocle */
+	{ MODKEY,                       XK_space,  zoom,           {0} }, /* swap master and first slave */
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -147,12 +148,10 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY,			XK_F5,     livereload,     {0} },
-	{ 0,                            XK_Print,  spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
-	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
 
 	/* Media controls */
+	{ 0,                            XK_Print,  spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
+	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
 	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("pamixer -t; kill -35 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("pamixer -i 2; kill -35 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("pamixer -d 2; kill -35 $(pidof dwmblocks)") },
@@ -164,19 +163,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_z,      incrgaps,       {.i = -1 } },
 	{ MODKEY,                       XK_a,      togglegaps,     {0} },
 	{ MODKEY|ShiftMask,             XK_a,      defaultgaps,    {0} },
-/*	{ MODKEY|Mod4Mask,              XK_i,      incrigaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,      incrogaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,      incrihgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,      incrihgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,      incrivgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,      incrivgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,      incrohgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,      incrovgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
-*/	
 };
 
 /* button definitions */
