@@ -2221,6 +2221,10 @@ resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
 		switch (rtype) {
 		case STRING:
 			strcpy(sdst, ret.addr);
+			if (!strncmp("font", name, 4))
+			{
+				strcat(sdst, ":style=bold");
+			}
 			break;
 		case INTEGER:
 			*idst = strtoul(ret.addr, NULL, 10);

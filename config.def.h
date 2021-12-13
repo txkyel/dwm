@@ -10,8 +10,8 @@ static const unsigned int gappov    = 20;       /* vert outer gap between window
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */ 
 static int showbar            = 1;        /* 0 means no bar */
 static int topbar             = 1;        /* 0 means bottom bar */
-static char font[]            = "DejaVu Sans Mono:pixelsize=14:antialias=true:style=bold";
-static char font2[]           = "Noto Color Emoji:pixelsize=12:antialias=true:autohint=true:style=bold";
+static char font[256]         = "DejaVu Sans Mono:pixelsize=14:antialias=true:autohint=true:style=bold";
+static char font2[256]        = "Noto Color Emoji:pixelsize=12:antialias=true:autohint=true:style=bold";
 static const char *fonts[]          = { font, font2 };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
