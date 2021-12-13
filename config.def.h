@@ -114,7 +114,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	
 	/* dwm view controls */
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("sysact") },
 	{ MODKEY,			XK_F5,   reload_xresources,{0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
