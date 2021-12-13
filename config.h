@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static unsigned int borderpx  = 1;        /* border pixel of windows */
+static unsigned int borderpx  = 2;        /* border pixel of windows */
 static unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
@@ -91,12 +91,12 @@ static const char *termcmd[]  = { "st", NULL };
 ResourcePref resources[] = {
 		{ "font",               STRING,  &font },
 		{ "font2",              STRING,  &font2 },
+		{ "color7",             STRING,  &normfgcolor },
 		{ "color0",             STRING,  &normbgcolor },
-		{ "color0",             STRING,  &normbordercolor },
-		{ "color4",             STRING,  &normfgcolor },
-		{ "color4",             STRING,  &selbgcolor },
-		{ "color8",             STRING,  &selbordercolor },
-		{ "color0",             STRING,  &selfgcolor },
+		{ "color8",             STRING,  &normbordercolor },
+		{ "color7",             STRING,  &selfgcolor },
+		{ "color2",             STRING,  &selbgcolor },
+		{ "color7",             STRING,  &selbordercolor },
 		{ "borderpx",          	INTEGER, &borderpx },
 		{ "snap",         	INTEGER, &snap },
 		{ "showbar",          	INTEGER, &showbar },
