@@ -157,8 +157,14 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("pamixer -i 2; kill -35 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("pamixer -d 2; kill -35 $(pidof dwmblocks)") },
 	{ 0, XF86XK_MonBrightnessUp,               spawn,          SHCMD("xbacklight -inc 15; kill -36 $(pidof dwmblocks)") },
-	{ 0, XF86XK_MonBrightnessDown,             spawn,          SHCMD("xbacklight -dec 15; kill -36 $(pidof dwmblocks)") },	
-
+	{ 0, XF86XK_MonBrightnessUp,               spawn,          SHCMD("xbacklight -inc 15; kill -36 $(pidof dwmblocks)") },
+	/* Media controls for X131e */
+/*	{ MODKEY,                       XK_F6,     spawn,          SHCMD("xbacklight -dec 15; kill -36 $(pidof dwmblocks)") },	
+	{ MODKEY,                       XK_F7,     spawn,          SHCMD("xbacklight -dec 15; kill -36 $(pidof dwmblocks)") },	
+	{ MODKEY,                       XK_F8,     spawn,          SHCMD("pamixer -t; kill -35 $(pidof dwmblocks)") },
+	{ MODKEY,                       XK_F9,     spawn,          SHCMD("pamixer -i 2; kill -35 $(pidof dwmblocks)") },
+	{ MODKEY,                       XK_F10,    spawn,          SHCMD("pamixer -d 2; kill -35 $(pidof dwmblocks)") },
+*/
 	/* vanity gaps hotkeys */
 	{ MODKEY,                       XK_z,      incrgaps,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_z,      incrgaps,       {.i = -1 } },
