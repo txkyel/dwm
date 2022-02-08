@@ -200,12 +200,15 @@ drw_scm_create(Drw *drw, char *clrnames[], size_t clrcount)
 	size_t i;
 	Clr *ret;
 
-	/* need at least two colors for a scheme */
-	if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
+	/* need at least three colors for a scheme */
+	if (!drw || !clrnames || clrcount < 3 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
 		return NULL;
 
 	for (i = 0; i < clrcount; i++)
 		drw_clr_create(drw, &ret[i], clrnames[i]);
+
+	/* requires three colors including the border color */
+	ret[2].pixel |= (unsigned char)(0xff * alpha) << 24;
 	return ret;
 }
 

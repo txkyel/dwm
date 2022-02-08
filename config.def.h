@@ -19,6 +19,7 @@ static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
 static char selbordercolor[]        = "#005577";
 static char selbgcolor[]            = "#005577";
+float alpha                         = 0.8;
 static char *colors[][3] = {
        /*                fg           bg           border   */
        [SchemeNorm]  = { normfgcolor, normbgcolor, normbordercolor },
@@ -94,7 +95,7 @@ ResourcePref resources[] = {
 		{ "font2",              STRING,  &font2 },
 		{ "color7",             STRING,  &normfgcolor },
 		{ "color0",             STRING,  &normbgcolor },
-		{ "color8",             STRING,  &normbordercolor },
+		{ "background",         STRING,  &normbordercolor },
 		{ "color7",             STRING,  &selfgcolor },
 		{ "color2",             STRING,  &selbgcolor },
 		{ "color7",             STRING,  &selbordercolor },
@@ -105,6 +106,7 @@ ResourcePref resources[] = {
 		{ "nmaster",          	INTEGER, &nmaster },
 		{ "resizehints",       	INTEGER, &resizehints },
 		{ "mfact",       	FLOAT,   &mfact },
+		{ "alpha",		FLOAT,	 &alpha },
 };
 
 static Key keys[] = {
